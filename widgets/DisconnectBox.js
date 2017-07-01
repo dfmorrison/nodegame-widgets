@@ -1,6 +1,6 @@
 /**
  * # DisconnectBox
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Shows a disconnect button
@@ -15,7 +15,7 @@
 
     // ## Meta-data
 
-    DisconnectBox.version = '0.2.2';
+    DisconnectBox.version = '0.2.3';
     DisconnectBox.description =
         'Visually display current, previous and next stage of the game.';
 
@@ -32,9 +32,11 @@
      * `DisconnectBox` displays current, previous and next stage of the game
      */
     function DisconnectBox() {
+
         // ### DisconnectBox.disconnectButton
         // The button for disconnection
         this.disconnectButton = null;
+        
         // ### DisconnectBox.ee
         // The event emitter with whom the events are registered
         this.ee = null;
@@ -50,7 +52,7 @@
      * @see DisconnectBox.writeStage
      */
     DisconnectBox.prototype.append = function() {
-        this.disconnectButton = W.getButton(undefined, 'Leave Experiment');
+        this.disconnectButton = W.get('button', 'Leave Experiment');
         this.disconnectButton.className = 'btn btn-lg';
         this.bodyDiv.appendChild(this.disconnectButton);
 

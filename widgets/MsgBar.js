@@ -1,6 +1,6 @@
 /**
  * # MsgBar
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a tool for sending messages to other connected clients
@@ -11,14 +11,13 @@
 
     "use strict";
 
-    var JSUS = node.JSUS,
-        Table = W.Table;
+    var Table = W.Table;
 
     node.widgets.register('MsgBar', MsgBar);
 
     // ## Meta-data
 
-    MsgBar.version = '0.7.0';
+    MsgBar.version = '0.7.1';
     MsgBar.description = 'Send a nodeGame message to players';
 
     MsgBar.title = 'Send MSG';
@@ -61,8 +60,10 @@
             table = i < 5 ? this.table : this.tableAdvanced;
 
             table.add(field, i, 0);
-            table.add(W.getTextInput(this.id + '_' + field, {tabindex: i+1}),
-                                     i, 1);
+            table.add(W.get('input', {
+                id: this.id + '_' + field,
+                tabindex: i+1
+            }), i, 1);
 
             if (field === 'to') {
                 this.recipient =
@@ -104,7 +105,7 @@
         this.tableAdvanced.table.style.display = 'none';
 
         // Show 'Send' button.
-        sendButton = W.addButton(this.bodyDiv);
+        sendButton = W.add('button', this.bodyDiv);
         sendButton.onclick = function() {
             var msg;
             msg = that.parse();
@@ -112,8 +113,7 @@
         };
 
         // Show a button that expands the table of advanced fields.
-        advButton =
-            W.addButton(this.bodyDiv, undefined, 'Toggle advanced options');
+        advButton = W.add('button', this.bodyDiv, 'Toggle advanced options');
         advButton.onclick = function() {
             that.tableAdvanced.table.style.display =
                 that.tableAdvanced.table.style.display === '' ? 'none' : '';
@@ -161,7 +161,7 @@
 
         if (key === 'stage' || key === 'to' || key === 'data') {
             try {
-                value = JSUS.parse(e.content.value);
+                value = J.parse(e.content.value);
             }
             catch (ex) {
                 value = e.content.value;
@@ -174,7 +174,7 @@
                 value = '' + value;
             }
 
-            if ((!JSUS.isArray(value) && 'string' !== typeof value) ||
+            if ((!J.isArray(value) && 'string' !== typeof value) ||
                 ('string' === typeof value && value.trim() === '')) {
 
                 alert('Invalid "to" field');
