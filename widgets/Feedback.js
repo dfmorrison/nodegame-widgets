@@ -1,6 +1,6 @@
 /**
  * # Feedback
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Sends a feedback message to the server
@@ -10,8 +10,6 @@
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.widgets.register('Feedback', Feedback);
 

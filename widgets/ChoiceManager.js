@@ -1,6 +1,6 @@
 /**
  * # ChoiceManager
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates and manages a set of selectable choices forms (e.g. ChoiceTable).
@@ -10,8 +10,6 @@
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.widgets.register('ChoiceManager', ChoiceManager);
 

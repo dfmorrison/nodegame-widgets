@@ -11,13 +11,11 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('DoneButton', DoneButton);
 
     // ## Meta-data
 
-    DoneButton.version = '0.2.0';
+    DoneButton.version = '0.2.1';
     DoneButton.description = 'Creates a button that if ' +
         'pressed emits node.done().';
 

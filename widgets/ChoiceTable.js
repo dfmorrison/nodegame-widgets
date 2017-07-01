@@ -1,6 +1,6 @@
 /**
  * # ChoiceTable
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a configurable table where each cell is a selectable choice
@@ -11,13 +11,11 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('ChoiceTable', ChoiceTable);
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.2.0';
+    ChoiceTable.version = '1.2.1';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 

@@ -1,6 +1,6 @@
 /**
  * # ChernoffFaces
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face.
@@ -11,14 +11,13 @@
 
     "use strict";
 
-    var J = node.JSUS;
     var Table = node.window.Table;
 
     node.widgets.register('ChernoffFaces', ChernoffFaces);
 
     // ## Meta-data
 
-    ChernoffFaces.version = '0.6.1';
+    ChernoffFaces.version = '0.6.2';
     ChernoffFaces.description =
         'Display parametric data in the form of a Chernoff Face.';
 
@@ -290,16 +289,19 @@
         if (!this.canvas) {
             options = this.options;
 
-            if (!options.canvas) {
-                options.canvas = {};
-                if ('undefined' !== typeof options.height) {
-                    options.canvas.height = options.height;
-                }
-                if ('undefined' !== typeof options.width) {
-                    options.canvas.width = options.width;
-                }
+            if (!options.canvas) options.canvas = {};            
+            
+            if ('undefined' !== typeof options.height) {
+                options.canvas.height = options.height;
             }
-            this.canvas = W.getCanvas('ChernoffFaces_canvas', options.canvas);
+            if ('undefined' !== typeof options.width) {
+                options.canvas.width = options.width;
+            }
+            if ('undefined' === typeof options.canvas.id) {
+                options.canvas.id = 'ChernoffFaces_canvas';
+            }
+            
+            this.canvas = W.get('canvas', options.canvas);
 
             // Face Painter.
             this.fp = new FacePainter(this.canvas);

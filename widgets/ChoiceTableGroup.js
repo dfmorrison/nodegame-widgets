@@ -1,6 +1,6 @@
 /**
  * # ChoiceTableGroup
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a table that groups together several choice tables widgets
@@ -13,13 +13,11 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('ChoiceTableGroup', ChoiceTableGroup);
 
     // ## Meta-data
 
-    ChoiceTableGroup.version = '1.2.0';
+    ChoiceTableGroup.version = '1.2.1';
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 

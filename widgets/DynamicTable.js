@@ -1,6 +1,6 @@
 /**
  * # DynamicTable
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Extends the GameTable widgets by allowing dynamic reshaping
@@ -8,21 +8,20 @@
  * TODO: this widget needs refactoring.
  *
  * @experimental
+ *
  * @see GameTable widget
+ *
  * www.nodegame.org
  */
 (function(node) {
 
     "use strict";
 
-    var GameStage = node.GameStage,
-    Table = node.window.Table,
-    HTMLRenderer = node.window.HTMLRenderer,
-    J = node.JSUS;
-
+    var GameStage = node.GameStage;
+    var Table = node.window.Table;
+    var HTMLRenderer = node.window.HTMLRenderer;
 
     node.widgets.register('DynamicTable', DynamicTable);
-
 
     DynamicTable.prototype = new Table();
     DynamicTable.prototype.constructor = Table;

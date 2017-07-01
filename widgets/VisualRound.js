@@ -14,13 +14,11 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('VisualRound', VisualRound);
 
     // ## Meta-data
 
-    VisualRound.version = '0.8.0';
+    VisualRound.version = '0.8.1';
     VisualRound.description = 'Display number of current round and/or stage.' +
         'Can also display countdown and total number of rounds and/or stages.';
 
