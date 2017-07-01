@@ -8818,169 +8818,6 @@
 })(node);
 
 /**
- * # GameBoard
- * Copyright(c) 2015 Stefano Balietti
- * MIT Licensed
- *
- * Displays a table of currently connected players
- *
- * www.nodegame.org
- */
-(function(node) {
-
-    "use strict";
-
-    node.widgets.register('GameBoard', GameBoard);
-
-    // ## Meta-data
-
-    GameBoard.version = '0.4.1';
-    GameBoard.description = 'Offer a visual representation of the state of ' +
-                            'all players in the game.';
-
-    GameBoard.title = 'Game Board';
-    GameBoard.className = 'gameboard';
-
-    /**
-     * ## GameBoard constructor
-     *
-     * `GameBoard` shows the currently connected players
-     */
-    function GameBoard(options) {
-        /**
-         * ### GameBoard.board
-         *
-         * The DIV wherein to display the players
-         */
-        this.board = null;
-
-        /**
-         * ### GameBoard.status
-         *
-         * The DIV wherein to display the status of the game board
-         */
-        this.status = null;
-    }
-
-    // ## GameBoard methods
-
-    /**
-     * ### GameBoard.append
-     *
-     * Appends widget to `this.bodyDiv` and updates the board
-     *
-     * @see GameBoard.updateBoard
-     */
-    GameBoard.prototype.append = function() {
-        this.status = node.window.addDiv(this.bodyDiv, 'gboard_status');
-        this.board = node.window.addDiv(this.bodyDiv, 'gboard');
-
-        this.updateBoard(node.game.pl);
-    };
-
-    GameBoard.prototype.listeners = function() {
-        var that = this;
-        node.on('UPDATED_PLIST', function() {
-            that.updateBoard(node.game.pl);
-        });
-    };
-
-    /**
-     * ### GameBoard.updateBoard
-     *
-     * Updates the information on the game board
-     *
-     * @see printLine
-     */
-    GameBoard.prototype.updateBoard = function(pl) {
-        var player, separator;
-        var that = this;
-
-        this.status.innerHTML = 'Updating...';
-
-        if (pl.size()) {
-            that.board.innerHTML = '';
-            pl.forEach( function(p) {
-                player = printLine(p);
-
-                W.write(player, that.board);
-
-                separator = printSeparator();
-                W.write(separator, that.board);
-            });
-        }
-        this.status.innerHTML = 'Connected players: ' + node.game.pl.length;
-    };
-
-    // ## Helper methods
-
-     /**
-     * ### printLine
-     *
-     * Returns a `String` describing the player passed in
-     *
-     * @param {Player} `p`. Player object which will be passed in by a call to
-     * `node.game.pl.forEach`.
-     *
-     * @return {String} A string describing the `Player` `p`.
-     *
-     * @see GameBoard.updateBoard
-     * @see nodegame-client/Player
-     */
-    function printLine(p) {
-
-        var line, levels, level;
-        levels = node.constants.stageLevels;
-
-        line = '[' + (p.name || p.id) + "]> \t";
-        line += '(' +  p.stage.round + ') ' + p.stage.stage + '.' +
-                p.stage.step;
-        line += ' ';
-
-        switch (p.stageLevel) {
-
-        case levels.UNINITIALIZED:
-            level = 'uninit.';
-            break;
-
-        case levels.INITIALIZING:
-            level = 'init...';
-            break;
-
-        case levels.INITIALIZING:
-            level = 'init!';
-            break;
-
-        case levels.LOADING:
-            level = 'loading';
-            break;
-
-        case levels.LOADED:
-            level = 'loaded';
-            break;
-
-        case levels.PLAYING:
-            level = 'playing';
-            break;
-        case levels.DONE:
-            level = 'done';
-            break;
-
-        default:
-            level = p.stageLevel;
-            break;
-        }
-
-        return line + '(' + level + ')';
-    }
-
-    function printSeparator() {
-        return W.getElement('hr', null, {style: 'color: #CCC;'});
-    }
-
-})(node);
-
-/**
  * # GameTable
  * Copyright(c) 2015 Stefano Balietti
  * MIT Licensed
@@ -9157,13 +8994,11 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('LanguageSelector', LanguageSelector);
 
     // ## Meta-data
 
-    LanguageSelector.version = '0.6.0';
+    LanguageSelector.version = '0.7.0';
     LanguageSelector.description = 'Display information about the current ' +
         'language and allows to change language.';
     LanguageSelector.title = 'Language';
@@ -9339,20 +9174,18 @@
                 // Creates labeled buttons.
                 for (language in msg.data) {
                     if (msg.data.hasOwnProperty(language)) {
-                        that.optionsLabel[language] =
-                            W.getElement('label',
-                                         language + 'Label', {
-                                             'for': language + 'RadioButton'
-                                         });
+                        that.optionsLabel[language] = W.get('label', {
+                            id: language + 'Label',
+                            'for': language + 'RadioButton'
+                        });
 
                         that.optionsDisplay[language] =
-                            W.getElement('input',
-                                         language + 'RadioButton', {
-                                             type: 'radio',
-                                             name: 'languageButton',
-                                             value: msg.data[language].name
-                                         }
-                                        );
+                            W.get('input', {
+                                id: language + 'RadioButton',
+                                type: 'radio',
+                                name: 'languageButton',
+                                value: msg.data[language].name
+                            });
 
                         that.optionsDisplay[language].onclick =
                             makeSetLanguageOnClick(language);
@@ -9362,7 +9195,7 @@
                         that.optionsLabel[language].appendChild(
                             document.createTextNode(
                                 msg.data[language].nativeName));
-                        node.window.addElement('br', that.displayForm);
+                        W.add('br', that.displayForm);
                         that.optionsLabel[language].className =
                             'unselectedButtonLabel';
                         that.displayForm.appendChild(
@@ -9372,13 +9205,14 @@
             }
             else {
 
-                that.displaySelection = W.getElement('select',
-                                                     'selectLanguage');
+                that.displaySelection = W.get('select', 'selectLanguage');
                 for (language in msg.data) {
                     that.optionsLabel[language] =
                         document.createTextNode(msg.data[language].nativeName);
-                    that.optionsDisplay[language] = node.window.getElement(
-                        'option', language + 'Option', { value: language });
+                    that.optionsDisplay[language] = W.get('option', {
+                        id: language + 'Option',
+                        value: language
+                    });
                     that.optionsDisplay[language].appendChild(
                         that.optionsLabel[language]);
                     that.displaySelection.appendChild(
@@ -9476,8 +9310,8 @@
         node.on.lang(this.onLangCallback);
 
         // Display initialization.
-        this.displayForm = node.window.getElement('form', 'radioButtonForm');
-        this.loadingDiv = node.window.addDiv(this.displayForm);
+        this.displayForm = W.get('form', 'radioButtonForm');
+        this.loadingDiv = W.add('div', this.displayForm);
         this.loadingDiv.innerHTML = 'Loading language information...';
 
         this.loadLanguages();
@@ -11506,7 +11340,7 @@
 
 /**
  * # VisualRound
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Display information about rounds and/or stage in the game
@@ -11526,7 +11360,7 @@
 
     // ## Meta-data
 
-    VisualRound.version = '0.7.0';
+    VisualRound.version = '0.8.0';
     VisualRound.description = 'Display number of current round and/or stage.' +
         'Can also display countdown and total number of rounds and/or stages.';
 
@@ -11725,9 +11559,7 @@
      * @see VisualRound.displayMode
      */
     VisualRound.prototype.updateDisplay = function() {
-        if (this.displayMode) {
-            this.displayMode.updateDisplay();
-        }
+        if (this.displayMode) this.displayMode.updateDisplay();        
     };
 
     /**
@@ -11759,7 +11591,9 @@
 
         // Validation of input parameter.
         if (!J.isArray(displayModeNames)) {
-            throw TypeError;
+            throw new TypeError('VisualRound.setDisplayMode: ' +
+                                'displayModeNames must be array. Found: ' +
+                                displayModeNames);
         }
 
         // Build compound name.
@@ -11989,9 +11823,7 @@
      * @see EmptyDisplayMode.updateDisplay
      */
     EmptyDisplayMode.prototype.init = function(options) {
-        this.displayDiv = node.window.getDiv();
-        this.displayDiv.className = 'rounddiv';
-
+        this.displayDiv = W.get('div', { className: 'roundDiv' });
         this.updateDisplay();
     };
 
@@ -12103,30 +11935,27 @@
      * @see CountUpStages.updateDisplay
      */
     CountUpStages.prototype.init = function(options) {
-        this.displayDiv = node.window.getDiv();
-        this.displayDiv.className = 'stagediv';
+        this.displayDiv = W.get('div', { className: 'stagediv' });
 
-        this.titleDiv = node.window.addElement('div', this.displayDiv);
+        this.titleDiv = W.add('div', this.displayDiv);
         this.titleDiv.className = 'title';
         this.titleDiv.innerHTML = 'Stage:';
 
         if (this.options.toTotal) {
-            this.curStageNumber = node.window.addElement('span',
-                this.displayDiv);
+            this.curStageNumber = W.add('span', this.displayDiv);
             this.curStageNumber.className = 'number';
         }
         else {
-            this.curStageNumber = node.window.addDiv(this.displayDiv);
+            this.curStageNumber = W.add('div', this.displayDiv);
             this.curStageNumber.className = 'number';
         }
 
         if (this.options.toTotal) {
-            this.textDiv = node.window.addElement('span', this.displayDiv);
+            this.textDiv = W.add('span', this.displayDiv);
             this.textDiv.className = 'text';
             this.textDiv.innerHTML = ' of ';
 
-            this.totStageNumber = node.window.addElement('span',
-                this.displayDiv);
+            this.totStageNumber = W.add('span', this.displayDiv);
             this.totStageNumber.className = 'number';
         }
 
@@ -12225,14 +12054,13 @@
      * @see CountDownStages.updateDisplay
      */
     CountDownStages.prototype.init = function(options) {
-        this.displayDiv = node.window.getDiv();
-        this.displayDiv.className = 'stagediv';
+        this.displayDiv = W.get('div', { className: 'stagediv' });
 
-        this.titleDiv = node.window.addDiv(this.displayDiv);
+        this.titleDiv = W.add('div', this.displayDiv);
         this.titleDiv.className = 'title';
         this.titleDiv.innerHTML = 'Stages left: ';
 
-        this.stagesLeft = node.window.addDiv(this.displayDiv);
+        this.stagesLeft = W.add('div', this.displayDiv);
         this.stagesLeft.className = 'number';
 
         this.updateDisplay();
@@ -12352,30 +12180,27 @@
      * @see CountUpRounds.updateDisplay
      */
     CountUpRounds.prototype.init = function(options) {
-        this.displayDiv = node.window.getDiv();
-        this.displayDiv.className = 'rounddiv';
+        this.displayDiv = W.get('div', { className: 'rounddiv' });
 
-        this.titleDiv = node.window.addElement('div', this.displayDiv);
+        this.titleDiv = W.add('div', this.displayDiv);
         this.titleDiv.className = 'title';
         this.titleDiv.innerHTML = 'Round:';
 
         if (this.options.toTotal) {
-            this.curRoundNumber = node.window.addElement('span',
-                this.displayDiv);
+            this.curRoundNumber = W.add('span', this.displayDiv);
             this.curRoundNumber.className = 'number';
         }
         else {
-            this.curRoundNumber = node.window.addDiv(this.displayDiv);
+            this.curRoundNumber = W.add('div',this.displayDiv);
             this.curRoundNumber.className = 'number';
         }
 
         if (this.options.toTotal) {
-            this.textDiv = node.window.addElement('span', this.displayDiv);
+            this.textDiv = W.add('span', this.displayDiv);
             this.textDiv.className = 'text';
             this.textDiv.innerHTML = ' of ';
 
-            this.totRoundNumber = node.window.addElement('span',
-                this.displayDiv);
+            this.totRoundNumber = W.add('span', this.displayDiv);
             this.totRoundNumber.className = 'number';
         }
 
@@ -12475,14 +12300,13 @@
      * @see CountDownRounds.updateDisplay
      */
     CountDownRounds.prototype.init = function(options) {
-        this.displayDiv = node.window.getDiv();
-        this.displayDiv.className = 'rounddiv';
+        this.displayDiv = W.get('div', { className: 'rounddiv' });
 
-        this.titleDiv = node.window.addDiv(this.displayDiv);
+        this.titleDiv = W.add('div',this.displayDiv);
         this.titleDiv.className = 'title';
         this.titleDiv.innerHTML = 'Round left: ';
 
-        this.roundsLeft = node.window.addDiv(this.displayDiv);
+        this.roundsLeft = W.add('div',this.displayDiv);
         this.roundsLeft.className = 'number';
 
         this.updateDisplay();
@@ -12585,17 +12409,17 @@
      * @see CompoundDisplayMode.updateDisplay
      */
      CompoundDisplayMode.prototype.init = function(options) {
-        var index;
-        this.displayDiv = node.window.getDiv();
+         var index;
+         this.displayDiv = document.createElement('div');
 
-        for (index in this.displayModes) {
-            if (this.displayModes.hasOwnProperty(index)) {
-                this.displayDiv.appendChild(
-                    this.displayModes[index].displayDiv);
-            }
-        }
+         for (index in this.displayModes) {
+             if (this.displayModes.hasOwnProperty(index)) {
+                 this.displayDiv.appendChild(
+                     this.displayModes[index].displayDiv);
+             }
+         }
 
-        this.updateDisplay();
+         this.updateDisplay();
      };
 
     /**
@@ -12766,13 +12590,11 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('VisualTimer', VisualTimer);
 
     // ## Meta-data
 
-    VisualTimer.version = '0.9.0';
+    VisualTimer.version = '0.9.1';
     VisualTimer.description = 'Display a configurable timer for the game. ' +
         'Can trigger events. Only for countdown smaller than 1h.';
 
