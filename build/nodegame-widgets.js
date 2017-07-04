@@ -416,6 +416,348 @@
          if (this.bodyDiv) W.removeClass(this.bodyDiv, 'panel-body');
      };
 
+
+    /**
+     * ### Widget.setSound
+     *
+     * Checks and assigns the value of a sound to play to user
+     *
+     * Throws an error if value is invalid
+     *
+     * @param {string} name The name of the sound to check
+     * @param {mixed} path Optional. The path to the audio file. If undefined
+     *    the default value from Widget.sounds is used
+     *
+     * @see Widget.sounds
+     * @see Widget.getSound
+     * @see Widget.setSounds
+     * @see Widget.getSounds
+     */
+    Widget.prototype.setSound = function(name, value) {
+        strSetter(this, name, value, 'sounds', 'setSound');
+    };
+
+    /**
+     * ### Widget.setSounds
+     *
+     * Assigns multiple sounds at the same time
+     *
+     * @param {object} sounds Optional. Object containing sound paths
+     *
+     * @see Widget.sounds
+     * @see Widget.setSound
+     * @see Widget.getSound
+     * @see Widget.getSounds
+     */
+    Widget.prototype.setSounds = function(sounds) {
+        strSetterMulti(this, sounds, 'sounds', 'setSound', 'setSounds');
+    };
+
+    /**
+     * ### Widget.getSound
+     *
+     * Returns the requested sound path
+     *
+     * @param {string} name The name of the sound variable.
+     * @param {mixed} param Optional. Additional info to pass to the
+     *   callback, if any
+     *
+     * @return {string} The requested sound
+     *
+     * @see Widget.sounds
+     * @see Widget.setSound
+     * @see Widget.getSound
+     * @see Widget.getSounds
+     */
+    Widget.prototype.getSound = function(name, param) {
+        return strGetter(this, name, 'sounds', 'getSound', param);
+    };
+
+    /**
+     * ### Widget.getSounds
+     *
+     * Returns an object with selected sounds (paths)
+     *
+     * @param {object|array} keys Optional. An object whose keys, or an array
+     *   whose values, are used of  to select the properties to return.
+     *   Default: all properties in the collection object.
+     * @param {object} param Optional. Object containing parameters to pass
+     *   to the sounds functions (if any)
+     *
+     * @return {object} out Selected sounds (paths)
+     *
+     * @see Widget.sounds
+     * @see Widget.setSound
+     * @see Widget.getSound
+     * @see Widget.setSounds
+     */
+    Widget.prototype.getSounds = function(keys, param) {
+        return strGetterMulti(this, 'sounds', 'getSound',
+                              'getSounds', keys, param);
+    };
+
+    /**
+     * ### Widget.getAllSounds
+     *
+     * Returns an object with all current sounds
+     *
+     * @param {object} param Optional. Object containing parameters to pass
+     *   to the sounds functions (if any)
+     *
+     * @return {object} out All current sounds
+     *
+     * @see Widget.getSound
+     */
+    Widget.prototype.getAllSounds = function(param) {
+        return strGetterMulti(this, 'sounds', 'getSound',
+                              'getAllSounds', undefined, param);
+    };
+
+    /**
+     * ### Widget.setText
+     *
+     * Checks and assigns the value of a text to display to user
+     *
+     * Throws an error if value is invalid
+     *
+     * @param {string} name The name of the property to check
+     * @param {mixed} value Optional. The value for the text. If undefined
+     *    the default value from Widget.texts is used
+     *
+     * @see Widget.texts
+     * @see Widget.getText
+     * @see Widget.setTexts
+     * @see Widget.getTexts
+     */
+    Widget.prototype.setText = function(name, value) {
+        strSetter(this, name, value, 'texts', 'setText');
+    };
+
+    /**
+     * ### Widget.setTexts
+     *
+     * Assigns all texts
+     *
+     * @param {object} texts Optional. Object containing texts
+     *
+     * @see Widget.texts
+     * @see Widget.setText
+     * @see Widget.getText
+     * @see Widget.getTexts
+     */
+    Widget.prototype.setTexts = function(texts) {
+        strSetterMulti(this, texts, 'texts', 'setText', 'setTexts');
+    };
+
+    /**
+     * ### Widget.getText
+     *
+     * Returns the requested text
+     *
+     * @param {string} name The name of the text variable.
+     * @param {mixed} param Optional. Additional to pass to the callback, if any
+     *
+     * @return {string} The requested text
+     *
+     * @see Widget.texts
+     * @see Widget.setText
+     * @see Widget.setTexts
+     * @see Widget.getTexts
+     */
+    Widget.prototype.getText = function(name, param) {
+        return strGetter(this, name, 'texts', 'getText', undefined, param);
+    };
+
+    /**
+     * ### Widget.getTexts
+     *
+     * Returns an object with selected texts
+     *
+     * @param {object|array} keys Optional. An object whose keys, or an array
+     *   whose values, are used of  to select the properties to return.
+     *   Default: all properties in the collection object.
+     * @param {object} param Optional. Object containing parameters to pass
+     *   to the sounds functions (if any)
+     *
+     * @return {object} out Selected texts
+     *
+     * @see Widget.texts
+     * @see Widget.setText
+     * @see Widget.getText
+     * @see Widget.setTexts
+     * @see Widget.getAllTexts
+     */
+    Widget.prototype.getTexts = function(keys, param) {
+        return strGetterMulti(this, 'texts', 'getText', 'getTexts',
+                              keys, param);
+    };
+
+    /**
+     * ### Widget.getAllTexts
+     *
+     * Returns an object with all current texts
+     *
+     * @param {object|array} param Optional. Object containing parameters
+     *   to pass to the texts functions (if any)
+     *
+     * @return {object} out All current texts
+     *
+     * @see Widget.texts
+     * @see Widget.setText
+     * @see Widget.setTexts
+     * @see Widget.getText
+     */
+    Widget.prototype.getAllTexts = function(param) {
+        return strGetterMulti(this, 'texts', 'getText',
+                              'getAllTexts', undefined, param);
+    };
+
+    // ## Helper methods.
+
+    /**
+     * ### strGetter
+     *
+     * Returns the value a property from a collection in instance/constructor
+     *
+     * If the string is not found in the live instance, the default value
+     * from the same collection inside the contructor is returned instead.
+     *
+     * If the property is not found in the corresponding static
+     * collection in the constructor of the instance, an error is thrown.
+     *
+     * @param {object} that The main instance
+     * @param {string} name The name of the property inside the collection
+     * @param {string} collection The name of the collection inside the instance
+     * @param {string} method The name of the invoking method (for error string)
+     * @param {mixed} param Optional. If the value of the requested property
+     *   is a function, this parameter is passed to it to get a return value.
+     *
+     * @return {string} res The value of requested property as found
+     *   in the instance, or its default value as found in the constructor
+     */
+    function strGetter(that, name, collection, method, param) {
+        var res;
+        if (!that.constructor[collection].hasOwnProperty(name)) {
+            throw new Error(J.funcName(that.constructor) + '.' + method +
+                            ': name not found: ' + name);
+        }
+        res = that[collection][name];
+        if ('function' === typeof res) {
+            res = res(that, param);
+            if ('string' !== typeof res) {
+                throw new TypeError(J.funcName(that.constructor) + '.' + method +
+                                    ': cb "' + name +
+                                    'did not return a string. Found: ' + res);
+            }
+        }
+        else if ('undefined' === typeof res) {
+            res = that.constructor[collection][name];
+        }
+        return res;
+    }
+
+    /**
+     * ### strGetterMulti
+     *
+     * Same as strGetter, but returns multiple values at once
+     *
+     * @param {object} that The main instance
+     * @param {string} collection The name of the collection inside the instance
+     * @param {string} getMethod The name of the method to get each value
+     * @param {string} method The name of the invoking method (for error string)
+     * @param {object|array} keys Optional. An object whose keys, or an array
+     *   whose values, are used of this object are to select the properties
+     *   to return. Default: all properties in the collection object.
+     * @param {mixed} param Optional. If the value of the requested property
+     *    is a function, this parameter is passed to it, when invoked to get
+     *    a return value. Default: undefined
+     *
+     * @return {string} res The requested value.
+     *
+     * @see strGetter
+     */
+    function strGetterMulti(that, collection, getMethod, method, keys, param) {
+        var out, k, len;
+        if (!keys) keys = that.constructor[collection];
+
+        out = {};
+        if (J.isArray(keys)) {
+            k = -1, len = keys.length;
+            for ( ; ++k < len; ) {
+                out[keys[k]] = that[getMethod](keys[k], param);
+            }
+        }
+        else {
+            for (k in keys) {
+                if (keys.hasOwnProperty(k)) {
+                    out[k] = that[getMethod](k, param);
+                }
+            }
+        }
+        return out;
+    }
+
+    /**
+     * ### strSetterMulti
+     *
+     * Same as strSetter, but sets multiple values at once
+     *
+     * @param {object} that The main instance
+     * @param {object} obj List of properties to set and their values
+     * @param {string} collection The name of the collection inside the instance
+     * @param {string} setMethod The name of the method to set each value
+     * @param {string} method The name of the invoking method (for error string)
+     *
+     * @see strSetter
+     */
+    function strSetterMulti(that, obj, collection, setMethod, method) {
+        var i, out;
+        out = out || {};
+        if ('object' !== typeof obj && 'undefined' !== typeof obj) {
+            throw new TypeError(J.funcName(that.constructor) + '.' + method +
+                                ': ' +  collection +
+                                ' must be object or undefined. Found: ' + obj);
+        }
+        for (i in obj) {
+            if (obj.hasOwnProperty(i)) {
+                that[setMethod](i, obj[i]);
+            }
+        }
+    }
+
+    /**
+     * ### strSetter
+     *
+     * Sets the value of a property in a collection if string, function or false
+     *
+     * @param {object} that The main instance
+     * @param {string} name The name of the property to set
+     * @param {string|function|false} value The value for the property
+     * @param {string} collection The name of the collection inside the instance
+     * @param {string} method The name of the invoking method (for error string)
+     *
+     * @see strSetter
+     */
+    function strSetter(that, name, value, collection, method) {
+        if ('undefined' === typeof that.constructor[collection][name]) {
+            
+            throw new TypeError(J.funcName(that.constructor) + '.' + method +
+                                ': name not found: ' + name);
+        }
+        if ('string' === typeof value ||
+            'function' === typeof value ||
+            false === value) {
+           
+            that[collection][name] = value;
+        }
+        else {
+            throw new TypeError(J.funcName(that.constructor) + '.' + method +
+                                ': value for item "' + name +
+                                '" must be string, function or false. ' +
+                                'Found: ' + value);
+        }
+    }
+    
 })(
     // Widgets works only in the browser environment.
     ('undefined' !== typeof node) ? node : module.parent.exports.node
@@ -674,6 +1016,10 @@
         widget.disabled = null;
         // Add highlighted.
         widget.highlighted = null;
+        // Add texts.
+        widget.texts = {};
+        // Add sounds.
+        widget.sounds = {};
 
         // Call init.
         widget.init(options);
@@ -1016,7 +1362,7 @@
 
 /**
  * # Chat
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a simple configurable chat
@@ -1027,13 +1373,11 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('Chat', Chat);
 
     // ## Meta-data
 
-    Chat.version = '0.5.1';
+    Chat.version = '0.5.2';
     Chat.description = 'Offers a uni-/bi-directional communication interface ' +
         'between players, or between players and the experimenter.';
 
@@ -1233,7 +1577,7 @@
 
     Chat.prototype.append = function() {
 
-        this.chat = W.getElement('div', this.chatId);
+        this.chat = W.get('div', this.chatId);
         this.bodyDiv.appendChild(this.chat);
 
         if (this.mode !== Chat.modes.RECEIVER_ONLY) {
@@ -1243,7 +1587,7 @@
                                            this.submitText,
                                            this.submitId);
             this.submit.className = 'btn btn-sm btn-secondary';
-            this.textarea = W.getElement('textarea', this.textareaId);
+            this.textarea = W.get('textarea', this.textareaId);
             // Append them.
             W.writeln('', this.bodyDiv);
             this.bodyDiv.appendChild(this.textarea);
@@ -1333,7 +1677,7 @@
 
 /**
  * # ChernoffFaces
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Displays multidimensional data in the shape of a Chernoff Face.
@@ -1344,14 +1688,13 @@
 
     "use strict";
 
-    var J = node.JSUS;
     var Table = node.window.Table;
 
     node.widgets.register('ChernoffFaces', ChernoffFaces);
 
     // ## Meta-data
 
-    ChernoffFaces.version = '0.6.1';
+    ChernoffFaces.version = '0.6.2';
     ChernoffFaces.description =
         'Display parametric data in the form of a Chernoff Face.';
 
@@ -1623,16 +1966,19 @@
         if (!this.canvas) {
             options = this.options;
 
-            if (!options.canvas) {
-                options.canvas = {};
-                if ('undefined' !== typeof options.height) {
-                    options.canvas.height = options.height;
-                }
-                if ('undefined' !== typeof options.width) {
-                    options.canvas.width = options.width;
-                }
+            if (!options.canvas) options.canvas = {};            
+            
+            if ('undefined' !== typeof options.height) {
+                options.canvas.height = options.height;
             }
-            this.canvas = W.getCanvas('ChernoffFaces_canvas', options.canvas);
+            if ('undefined' !== typeof options.width) {
+                options.canvas.width = options.width;
+            }
+            if ('undefined' === typeof options.canvas.id) {
+                options.canvas.id = 'ChernoffFaces_canvas';
+            }
+            
+            this.canvas = W.get('canvas', options.canvas);
 
             // Face Painter.
             this.fp = new FacePainter(this.canvas);
@@ -3006,7 +3352,7 @@
 
 /**
  * # ChoiceManager
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates and manages a set of selectable choices forms (e.g. ChoiceTable).
@@ -3016,8 +3362,6 @@
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.widgets.register('ChoiceManager', ChoiceManager);
 
@@ -3560,7 +3904,7 @@
 
 /**
  * # ChoiceTable
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a configurable table where each cell is a selectable choice
@@ -3571,13 +3915,11 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('ChoiceTable', ChoiceTable);
 
     // ## Meta-data
 
-    ChoiceTable.version = '1.2.0';
+    ChoiceTable.version = '1.2.1';
     ChoiceTable.description = 'Creates a configurable table where ' +
         'each cell is a selectable choice.';
 
@@ -5069,7 +5411,7 @@
 
 /**
  * # ChoiceTableGroup
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a table that groups together several choice tables widgets
@@ -5082,13 +5424,11 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('ChoiceTableGroup', ChoiceTableGroup);
 
     // ## Meta-data
 
-    ChoiceTableGroup.version = '1.2.0';
+    ChoiceTableGroup.version = '1.2.1';
     ChoiceTableGroup.description = 'Groups together and manages sets of ' +
         'ChoiceTable widgets.';
 
@@ -6840,7 +7180,7 @@
 
 /**
  * # DebugInfo
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Display information about the state of a player
@@ -6851,15 +7191,13 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     var Table = node.window.Table;
 
     node.widgets.register('DebugInfo', DebugInfo);
 
     // ## Meta-data
 
-    DebugInfo.version = '0.6.0';
+    DebugInfo.version = '0.6.1';
     DebugInfo.description = 'Display basic info a client\'s status.';
 
     DebugInfo.title = 'Debug Info';
@@ -7011,7 +7349,7 @@
 
 /**
  * # DisconnectBox
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Shows a disconnect button
@@ -7026,7 +7364,7 @@
 
     // ## Meta-data
 
-    DisconnectBox.version = '0.2.2';
+    DisconnectBox.version = '0.2.3';
     DisconnectBox.description =
         'Visually display current, previous and next stage of the game.';
 
@@ -7043,9 +7381,11 @@
      * `DisconnectBox` displays current, previous and next stage of the game
      */
     function DisconnectBox() {
+
         // ### DisconnectBox.disconnectButton
         // The button for disconnection
         this.disconnectButton = null;
+        
         // ### DisconnectBox.ee
         // The event emitter with whom the events are registered
         this.ee = null;
@@ -7061,7 +7401,7 @@
      * @see DisconnectBox.writeStage
      */
     DisconnectBox.prototype.append = function() {
-        this.disconnectButton = W.getButton(undefined, 'Leave Experiment');
+        this.disconnectButton = W.get('button', 'Leave Experiment');
         this.disconnectButton.className = 'btn btn-lg';
         this.bodyDiv.appendChild(this.disconnectButton);
 
@@ -7105,13 +7445,11 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('DoneButton', DoneButton);
 
     // ## Meta-data
 
-    DoneButton.version = '0.2.0';
+    DoneButton.version = '0.2.1';
     DoneButton.description = 'Creates a button that if ' +
         'pressed emits node.done().';
 
@@ -7301,7 +7639,7 @@
 
 /**
  * # DynamicTable
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Extends the GameTable widgets by allowing dynamic reshaping
@@ -7309,21 +7647,20 @@
  * TODO: this widget needs refactoring.
  *
  * @experimental
+ *
  * @see GameTable widget
+ *
  * www.nodegame.org
  */
 (function(node) {
 
     "use strict";
 
-    var GameStage = node.GameStage,
-    Table = node.window.Table,
-    HTMLRenderer = node.window.HTMLRenderer,
-    J = node.JSUS;
-
+    var GameStage = node.GameStage;
+    var Table = node.window.Table;
+    var HTMLRenderer = node.window.HTMLRenderer;
 
     node.widgets.register('DynamicTable', DynamicTable);
-
 
     DynamicTable.prototype = new Table();
     DynamicTable.prototype.constructor = Table;
@@ -7867,9 +8204,6 @@
 
     "use strict";
 
-    var J;
-    J = JSUS;
-
     // Register the widget in the widgets collection.
     node.widgets.register('EndScreen', EndScreen);
 
@@ -8223,7 +8557,7 @@
 
 /**
  * # Feedback
- * Copyright(c) 2017 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Sends a feedback message to the server
@@ -8233,8 +8567,6 @@
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.widgets.register('Feedback', Feedback);
 
@@ -9838,7 +10170,7 @@
 
 /**
  * # MsgBar
- * Copyright(c) 2016 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
  * Creates a tool for sending messages to other connected clients
@@ -9849,14 +10181,13 @@
 
     "use strict";
 
-    var JSUS = node.JSUS,
-        Table = W.Table;
+    var Table = W.Table;
 
     node.widgets.register('MsgBar', MsgBar);
 
     // ## Meta-data
 
-    MsgBar.version = '0.7.0';
+    MsgBar.version = '0.7.1';
     MsgBar.description = 'Send a nodeGame message to players';
 
     MsgBar.title = 'Send MSG';
@@ -9899,8 +10230,10 @@
             table = i < 5 ? this.table : this.tableAdvanced;
 
             table.add(field, i, 0);
-            table.add(W.getTextInput(this.id + '_' + field, {tabindex: i+1}),
-                                     i, 1);
+            table.add(W.get('input', {
+                id: this.id + '_' + field,
+                tabindex: i+1
+            }), i, 1);
 
             if (field === 'to') {
                 this.recipient =
@@ -9942,7 +10275,7 @@
         this.tableAdvanced.table.style.display = 'none';
 
         // Show 'Send' button.
-        sendButton = W.addButton(this.bodyDiv);
+        sendButton = W.add('button', this.bodyDiv);
         sendButton.onclick = function() {
             var msg;
             msg = that.parse();
@@ -9950,8 +10283,7 @@
         };
 
         // Show a button that expands the table of advanced fields.
-        advButton =
-            W.addButton(this.bodyDiv, undefined, 'Toggle advanced options');
+        advButton = W.add('button', this.bodyDiv, 'Toggle advanced options');
         advButton.onclick = function() {
             that.tableAdvanced.table.style.display =
                 that.tableAdvanced.table.style.display === '' ? 'none' : '';
@@ -9999,7 +10331,7 @@
 
         if (key === 'stage' || key === 'to' || key === 'data') {
             try {
-                value = JSUS.parse(e.content.value);
+                value = J.parse(e.content.value);
             }
             catch (ex) {
                 value = e.content.value;
@@ -10012,7 +10344,7 @@
                 value = '' + value;
             }
 
-            if ((!JSUS.isArray(value) && 'string' !== typeof value) ||
+            if ((!J.isArray(value) && 'string' !== typeof value) ||
                 ('string' === typeof value && value.trim() === '')) {
 
                 alert('Invalid "to" field');
@@ -10345,8 +10677,6 @@
 (function(node) {
 
     "use strict";
-
-    var J = node.JSUS;
 
     node.widgets.register('Requirements', Requirements);
 
@@ -11354,13 +11684,11 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('VisualRound', VisualRound);
 
     // ## Meta-data
 
-    VisualRound.version = '0.8.0';
+    VisualRound.version = '0.8.1';
     VisualRound.description = 'Display number of current round and/or stage.' +
         'Can also display countdown and total number of rounds and/or stages.';
 
@@ -13553,7 +13881,7 @@
          * @see WaitingRoom.setTexts
          * @see WaitingRoom.getTexts
          */
-        this.texts = {};
+        // this.texts = {};
 
         /**
          * ### WaitingRoom.sounds
@@ -13565,7 +13893,7 @@
          * @see WaitingRoom.setSounds
          * @see WaitingRoom.getSounds
          */
-        this.sounds = {};
+        // this.sounds = {};
     }
 
     // ## WaitingRoom methods
@@ -13969,352 +14297,15 @@
         node.deregisterSetup('waitroom');
     };
 
-    /**
-     * ### WaitingRoom.setSound
-     *
-     * Checks and assigns the value of a sound to play to user
-     *
-     * Throws an error if value is invalid
-     *
-     * @param {string} name The name of the sound to check
-     * @param {mixed} path Optional. The path to the audio file. If undefined
-     *    the default value from WaitingRoom.sounds is used
-     *
-     * @see WaitingRoom.sounds
-     * @see WaitingRoom.getSound
-     * @see WaitingRoom.setSounds
-     * @see WaitingRoom.getSounds
-     */
-    WaitingRoom.prototype.setSound = function(name, value) {
-        strSetter(this, name, value, 'sounds', 'WaitingRoom.setSound');
-    };
-
-    /**
-     * ### WaitingRoom.setSounds
-     *
-     * Assigns multiple sounds at the same time
-     *
-     * @param {object} sounds Optional. Object containing sound paths
-     *
-     * @see WaitingRoom.sounds
-     * @see WaitingRoom.setSound
-     * @see WaitingRoom.getSound
-     * @see WaitingRoom.getSounds
-     */
-    WaitingRoom.prototype.setSounds = function(sounds) {
-        strSetterMulti(this, sounds, 'sounds', 'setSound',
-                       'WaitingRoom.setSounds');
-    };
-
-    /**
-     * ### WaitingRoom.getSound
-     *
-     * Returns the requested sound path
-     *
-     * @param {string} name The name of the sound variable.
-     * @param {mixed} param Optional. Additional info to pass to the
-     *   callback, if any
-     *
-     * @return {string} The requested sound
-     *
-     * @see WaitingRoom.sounds
-     * @see WaitingRoom.setSound
-     * @see WaitingRoom.getSound
-     * @see WaitingRoom.getSounds
-     */
-    WaitingRoom.prototype.getSound = function(name, param) {
-        return strGetter(this, name, 'sounds', 'WaitingRoom.getSound', param);
-    };
-
-    /**
-     * ### WaitingRoom.getSounds
-     *
-     * Returns an object with selected sounds (paths)
-     *
-     * @param {object|array} keys Optional. An object whose keys, or an array
-     *   whose values, are used of  to select the properties to return.
-     *   Default: all properties in the collection object.
-     * @param {object} param Optional. Object containing parameters to pass
-     *   to the sounds functions (if any)
-     *
-     * @return {object} out Selected sounds (paths)
-     *
-     * @see WaitingRoom.sounds
-     * @see WaitingRoom.setSound
-     * @see WaitingRoom.getSound
-     * @see WaitingRoom.setSounds
-     */
-    WaitingRoom.prototype.getSounds = function(keys, param) {
-        return strGetterMulti(this, 'sounds', 'getSound',
-                              'WaitingRoom.getSounds', keys, param);
-    };
-
-    /**
-     * ### WaitingRoom.getAllSounds
-     *
-     * Returns an object with all current sounds
-     *
-     * @param {object} param Optional. Object containing parameters to pass
-     *   to the sounds functions (if any)
-     *
-     * @return {object} out All current sounds
-     *
-     * @see WaitingRoom.getSound
-     */
-    WaitingRoom.prototype.getAllSounds = function(param) {
-        return strGetterMulti(this, 'sounds', 'getSound',
-                              'WaitingRoom.getAllSounds', undefined, param);
-    };
-
-    /**
-     * ### WaitingRoom.setText
-     *
-     * Checks and assigns the value of a text to display to user
-     *
-     * Throws an error if value is invalid
-     *
-     * @param {string} name The name of the property to check
-     * @param {mixed} value Optional. The value for the text. If undefined
-     *    the default value from WaitingRoom.texts is used
-     *
-     * @see WaitingRoom.texts
-     * @see WaitingRoom.getText
-     * @see WaitingRoom.setTexts
-     * @see WaitingRoom.getTexts
-     */
-    WaitingRoom.prototype.setText = function(name, value) {
-        strSetter(this, name, value, 'texts', 'WaitingRoom.setText');
-    };
-
-    /**
-     * ### WaitingRoom.setTexts
-     *
-     * Assigns all texts
-     *
-     * @param {object} texts Optional. Object containing texts
-     *
-     * @see WaitingRoom.texts
-     * @see WaitingRoom.setText
-     * @see WaitingRoom.getText
-     * @see WaitingRoom.getTexts
-     */
-    WaitingRoom.prototype.setTexts = function(texts) {
-        strSetterMulti(this, texts, 'texts', 'setText', 'WaitingRoom.setTexts');
-    };
-
-    /**
-     * ### WaitingRoom.getText
-     *
-     * Returns the requested text
-     *
-     * @param {string} name The name of the text variable.
-     * @param {mixed} param Optional. Additional to pass to the callback, if any
-     *
-     * @return {string} The requested text
-     *
-     * @see WaitingRoom.texts
-     * @see WaitingRoom.setText
-     * @see WaitingRoom.setTexts
-     * @see WaitingRoom.getTexts
-     */
-    WaitingRoom.prototype.getText = function(name, param) {
-        return strGetter(this, name, 'texts',
-                         'WaitingRoom.getText', undefined, param);
-    };
-
-    /**
-     * ### WaitingRoom.getTexts
-     *
-     * Returns an object with selected texts
-     *
-     * @param {object|array} keys Optional. An object whose keys, or an array
-     *   whose values, are used of  to select the properties to return.
-     *   Default: all properties in the collection object.
-     * @param {object} param Optional. Object containing parameters to pass
-     *   to the sounds functions (if any)
-     *
-     * @return {object} out Selected texts
-     *
-     * @see WaitingRoom.texts
-     * @see WaitingRoom.setText
-     * @see WaitingRoom.getText
-     * @see WaitingRoom.setTexts
-     * @see WaitingRoom.getAllTexts
-     */
-    WaitingRoom.prototype.getTexts = function(keys, param) {
-        return strGetterMulti(this, 'texts', 'getText',
-                              'WaitingRoom.getTexts', keys, param);
-    };
-
-    /**
-     * ### WaitingRoom.getAllTexts
-     *
-     * Returns an object with all current texts
-     *
-     * @param {object|array} param Optional. Object containing parameters
-     *   to pass to the texts functions (if any)
-     *
-     * @return {object} out All current texts
-     *
-     * @see WaitingRoom.texts
-     * @see WaitingRoom.setText
-     * @see WaitingRoom.setTexts
-     * @see WaitingRoom.getText
-     */
-    WaitingRoom.prototype.getAllTexts = function(param) {
-        return strGetterMulti(this, 'texts', 'getText',
-                              'WaitingRoom.getAllTexts', undefined, param);
-    };
-
-    // ## Helper methods.
-
-    /**
-     * ### strGetter
-     *
-     * Returns the value a property from a collection in instance/constructor
-     *
-     * If the string is not found in the live instance, the default value
-     * from the same collection inside the contructor is returned instead.
-     *
-     * If the property is not found in the corresponding static
-     * collection in the constructor of the instance, an error is thrown.
-     *
-     * @param {object} that The main instance
-     * @param {string} name The name of the property inside the collection
-     * @param {string} collection The name of the collection inside the instance
-     * @param {string} method The name of the invoking method (for error string)
-     * @param {mixed} param Optional. If the value of the requested property
-     *   is a function, this parameter is passed to it to get a return value.
-     *
-     * @return {string} res The value of requested property as found
-     *   in the instance, or its default value as found in the constructor
-     */
-    function strGetter(that, name, collection, method, param) {
-        var res;
-        if (!that.constructor[collection].hasOwnProperty(name)) {
-            throw new Error(method + ': name not found: ' + name);
-        }
-        res = that[collection][name];
-        if ('function' === typeof res) {
-            res = res(that, param);
-            if ('string' !== typeof res) {
-                throw new TypeError(method + ': cb "' + name +
-                                    'did not return a string. Found: ' + res);
-            }
-        }
-        else if ('undefined' === typeof res) {
-            res = that.constructor[collection][name];
-        }
-        return res;
-    }
-
-    /**
-     * ### strGetterMulti
-     *
-     * Same as strGetter, but returns multiple values at once
-     *
-     * @param {object} that The main instance
-     * @param {string} collection The name of the collection inside the instance
-     * @param {string} getMethod The name of the method to get each value
-     * @param {string} method The name of the invoking method (for error string)
-     * @param {object|array} keys Optional. An object whose keys, or an array
-     *   whose values, are used of this object are to select the properties
-     *   to return. Default: all properties in the collection object.
-     * @param {mixed} param Optional. If the value of the requested property
-     *    is a function, this parameter is passed to it, when invoked to get
-     *    a return value. Default: undefined
-     *
-     * @return {string} res The requested value.
-     *
-     * @see strGetter
-     */
-    function strGetterMulti(that, collection, getMethod, method, keys, param) {
-        var out, k, len;
-        if (!keys) keys = that.constructor[collection];
-
-        out = {};
-        if (J.isArray(keys)) {
-            k = -1, len = keys.length;
-            for ( ; ++k < len; ) {
-                out[keys[k]] = that[getMethod](keys[k], param);
-            }
-        }
-        else {
-            for (k in keys) {
-                if (keys.hasOwnProperty(k)) {
-                    out[k] = that[getMethod](k, param);
-                }
-            }
-        }
-        return out;
-    }
-
-    /**
-     * ### strSetterMulti
-     *
-     * Same as strSetter, but sets multiple values at once
-     *
-     * @param {object} that The main instance
-     * @param {object} obj List of properties to set and their values
-     * @param {string} collection The name of the collection inside the instance
-     * @param {string} setMethod The name of the method to set each value
-     * @param {string} method The name of the invoking method (for error string)
-     *
-     * @see strSetter
-     */
-    function strSetterMulti(that, obj, collection, setMethod, method) {
-        var i, out;
-        out = out || {};
-        if ('object' !== typeof obj && 'undefined' !== typeof obj) {
-            throw new TypeError(method + ': ' +  collection +
-                                ' must be object or undefined. Found: ' + obj);
-        }
-        for (i in obj) {
-            if (obj.hasOwnProperty(i)) {
-                that[setMethod](i, obj[i]);
-            }
-        }
-    }
-
-    /**
-     * ### strSetter
-     *
-     * Sets the value of a property in a collection if string, function or false
-     *
-     * @param {object} that The main instance
-     * @param {string} name The name of the property to set
-     * @param {string|function|false} value The value for the property
-     * @param {string} collection The name of the collection inside the instance
-     * @param {string} method The name of the invoking method (for error string)
-     *
-     * @see strSetter
-     */
-    function strSetter(that, name, value, collection, method) {
-        if ('undefined' === typeof that.constructor[collection][name]) {
-            throw new TypeError(method + ': name not found: ' + name);
-        }
-        if ('string' === typeof value ||
-            'function' === typeof value ||
-            false === value) {
-           
-            that[collection][name] = value;
-        }
-        else {
-            throw new TypeError(method + ': value for item "' + name +
-                                '" must be string, function or false. ' +
-                                'Found: ' + value);
-        }
-    }
 
 })(node);
 
 /**
  * # Wall
- * Copyright(c) 2015 Stefano Balietti
+ * Copyright(c) 2017 Stefano Balietti <ste@nodegame.org>
  * MIT Licensed
  *
- * Creates a wall where log and other information is added
- * with a number and timestamp
+ * Creates a wall where LOG messages are displayed with a number and timestamp
  *
  * www.nodegame.org
  */
@@ -14322,15 +14313,13 @@
 
     "use strict";
 
-    var J = node.JSUS;
-
     node.widgets.register('Wall', Wall);
 
     // ## Meta-data
 
-    Wall.version = '0.3.1';
+    Wall.version = '0.3.2';
     Wall.description = 'Intercepts all LOG events and prints them into a PRE ' +
-                       'element with an ordinal number and a timestamp.';
+        'element with an ordinal number and a timestamp.';
 
     Wall.title = 'Wall';
     Wall.className = 'wall';
@@ -14386,7 +14375,7 @@
          *
          * The PRE in which to write
          */
-        this.wall = node.window.getElement('pre', this.id);
+        this.wall = W.get('pre', this.id);
     }
 
     // ## Wall methods
